@@ -1,0 +1,21 @@
+<h1>All Post Files:</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @posts.each do |post| %>
+  <tr>
+    <td><%= link_to post.name, post %></td>
+    <td><%= post.description %></td>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Post', new_post_path %>
