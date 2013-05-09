@@ -1,0 +1,15 @@
+<h1><b><u>Other Service Providers:</u></b></h1>
+<table>
+    <col width="200">
+	<tr>
+
+		<th>Name: </th>
+		<th>Address: </th>
+	</tr>
+<% @other_service_providers.each do |sp| %>
+	<tr>
+		<td style="text-align:center;"><%= sp["name"] %></td>
+		<td style="text-align:center;"><%= sp["adress"] %></td>
+	</tr>
+<% end %>
+</table>

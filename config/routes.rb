@@ -11,6 +11,10 @@ Shs::Application.routes.draw do
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
 
+  match '/other_sps', to: 'control_registry#other_sps'
+  match '/app_registration', to: 'control_registry#app_registration'
+  match '/register_posts', to: 'control_registry#register_posts'
+
   root to: 'static_pages#home'
 
   # The priority is based upon order of creation:

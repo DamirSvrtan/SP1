@@ -1,8 +1,13 @@
 <% provide(:title, 'Home') %>
 
 <div id="header2">
-	<h1><%= yield(:title) %></h1>
+	<b><p style="font-size:30px">.<%= @app_name %> Home Page.</p></b>
 	<p>
-		<%= link_to "Sign Up!", 'signup' %>
+		<% unless signed_in? %>
+			<%= link_to "Sign up!", 'signup' %> or <%= link_to "Sign in!" , signin_path %>
+		<% else %>
+			<br>
+			<%= button_to "Register app with the Central Registry!", app_registration_path %>
+		<% end %>
 	</p>
 </div>

@@ -1,14 +1,14 @@
 class PostsController < ApplicationController
   before_filter :authorize
-  # GET /posts
-  # GET /posts.json
+
   def authorize 
 	redirect_to signin_path unless signed_in?
   end
 
+  # GET /posts
+  # GET /posts.json
   def index
     @posts = Post.all
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @posts }

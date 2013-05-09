@@ -1,21 +1,23 @@
 <h1>All Post Files:</h1>
-
+<br/>
 <table>
+    <col width="200">
   <tr>
     <th>Name</th>
     <th>Description</th>
-    <th></th>
-    <th></th>
-    <th></th>
+    <th>Author</th>	
   </tr>
 
 <% @posts.each do |post| %>
   <tr>
-    <td><%= link_to post.name, post %></td>
-    <td><%= post.description %></td>
+    <td style="text-align:center;"><%= link_to post.name, post %></td>
+    <td style="text-align:center;"><%= post.description %></td>
+    <td style="text-align:center;"><%= post.user.name %></td>
+  </tr>
 <% end %>
 </table>
 
-<br />
+<br/>
+<br/>
 
 <%= link_to 'New Post', new_post_path %>
