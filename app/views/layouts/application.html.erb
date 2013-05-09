@@ -14,7 +14,8 @@
 				<li><%= link_to "HomePage", root_path %></li>
 				<li><%= link_to "OtherServiceProviders", other_sps_path %></li>
 				<li><%= link_to "AddNewPost", new_post_path %></li>
-				<li><%= link_to "PostsIndex", posts_path %></li>
+				<li><%= link_to "LocalPosts", posts_path %></li>
+				<li><%= link_to "AllPosts", all_posts_path %></li>
 				<li><%= link_to "Profile", current_user %></li>
 				<li><%= link_to "Sign Out", signout_path, method: "delete" %></li>
 			<% else %>

@@ -1,0 +1,20 @@
+<h1><b><u>Local And Remote Posts:</u></b></h1>
+<table>
+    
+	<tr>
+		<th style="width:10px">Name: </th>
+		<th style="width:280px">Description: </th>
+		<th style="width:70px">Author: </th>
+		<th style="width:120px">Service Provider: </th>
+		<th style="width:120px"></th>
+	</tr>
+<% @posts.each do |post| %>
+	<tr>
+		<td style="text-align:center;"><%= post["name"] %></td>
+		<td style="text-align:center;"><%= post["description"] %></td>
+		<td style="text-align:center;"><%= post["author"] %></td>
+		<td style="text-align:center;"><%= post["service_provider_name"] %></td>
+		<td style="text-align:center;"><%= link_to "Request This Post", request_post_path(:service_provider => post["service_provider_name"], :name => post["name"]) %></td>
+	</tr>
+<% end %>
+</table>

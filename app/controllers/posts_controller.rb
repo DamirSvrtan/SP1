@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_filter :authorize
+  before_filter :authorize, :except => [:show]
 
   def authorize 
 	redirect_to signin_path unless signed_in?
