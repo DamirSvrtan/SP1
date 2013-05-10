@@ -63,4 +63,10 @@ class CentralRegistry
 	end
   end
 
+  def self.get_certificate
+	encoded_encrypted_certificate = JSON.parse(open("http://localhost:3000/certificate").read)
+	encrypted_certificate = Base64.decode64(encoded_encrypted_certificate["certificate"])
+	certificate = Key.encrypt_cr_certificate(encrypted_certificate)
+  end
+
 end

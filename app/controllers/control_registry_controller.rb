@@ -11,6 +11,11 @@ class ControlRegistryController < ApplicationController
 
   def app_registration
 	response = CentralRegistry.register
+	if response["status"] == "Registered Successfully!"
+		name = Rails.root.to_s.scan(/\w+$/).first
+		Key.generateAndStoreKeys(name.upcase)
+		Key.savePublicKey("CR", response["public_key_modulus"], response["public_key_exponent"])
+	end
 	flash[:notice]="#{response["status"]}"
 	redirect_to root_path
   end
@@ -35,4 +40,9 @@ class ControlRegistryController < ApplicationController
 	redirect_to url
   end
   
+  def get_certificate
+	certificate = CentralRegistry.get_certificate
+	flash[:notice] = "#{certificate}"
+	redirect_to root_path
+  end
 end
