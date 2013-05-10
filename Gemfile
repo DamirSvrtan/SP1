@@ -6,6 +6,7 @@ gem 'sqlite3'
 gem 'bcrypt-ruby', '3.0.1'
 gem 'omniauth-facebook'
 gem "paperclip", "~> 3.0"
+gem 'rsa'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

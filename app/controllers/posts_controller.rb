@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+  require 'rsa'
   before_filter :authorize, :except => [:show]
 
   def authorize 
