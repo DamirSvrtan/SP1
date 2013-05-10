@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130508112920) do
+ActiveRecord::Schema.define(:version => 20130510120133) do
+
+  create_table "keys", :force => true do |t|
+    t.string   "sp"
+    t.string   "public_key_modulus"
+    t.string   "public_key_exponent"
+    t.string   "private_key_modulus"
+    t.string   "private_key_exponent"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
 
   create_table "posts", :force => true do |t|
     t.string   "name"
