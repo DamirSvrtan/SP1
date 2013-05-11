@@ -34,10 +34,35 @@ require 'rsa'
 	Key.create(:sp => sp, :public_key_modulus => public_key_modulus.to_s, :public_key_exponent => public_key_exponent.to_s)
   end
 
-  def self.encrypt_cr_certificate(encrypted_certificate)
+  def self.decrypt_certificate(encoded_encrypted_certificate)
+	#special part for url_parameters, + and \n replacing
+	encoded_encrypted_certificate.concat("\n") if encoded_encrypted_certificate.split('').last != "\n"
+	if encoded_encrypted_certificate.split('').include?(' ')
+		encoded_encrypted_certificate = encoded_encrypted_certificate.split('').map {|x| x == ' ' ? '+' : x }.join('')
+	end
+	#
 	crKey = Key.find_by_sp("CR")
+	encrypted_certificate = Base64.decode64(encoded_encrypted_certificate)
 	public = RSA::Key.new(crKey.public_key_modulus, crKey.public_key_exponent)
 	new_key = RSA::KeyPair.new(nil, public)
 	plaintext = new_key.encrypt(encrypted_certificate)
   end
+
+#  def self.decryptCertificate(cipherdata)
+#	cipherdata = Base64.encode64(cipherdata)
+#	key = Key.find_by_sp("CR")
+#	public = RSA::Key.new(key.public_key_modulus, key.public_key_exponent)
+#	new_key = RSA::KeyPair.new(nil, public)
+#	plaintext = new_key.encrypt(cipherdata)
+# end
+
+#dekriptiranje linka vlastitim privatnim kljucem
+  def self.decrypt_link(link)
+	name = Rails.root.to_s.scan(/\w+$/).first
+	spKey = Key.find_by_sp(name)
+	private = RSA::Key.new(spKey.private_key_modulus, spKey.private_key_exponent)
+	new_key = RSA::KeyPair.new(private, nil)
+	link = new_key.decrypt(link)
+  end
+
 end

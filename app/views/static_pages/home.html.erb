@@ -7,7 +7,7 @@
 			<%= link_to "Sign up!", 'signup' %> or <%= link_to "Sign in!" , signin_path %>
 		<% else %>
 			<br>
-			<%= button_to "Register app with the Central Registry!", app_registration_path %>
+			<%= button_to "Register app with the Central Registry, generate public/private key for your SP, fetch the public key from the CR", app_registration_path %>
 			<%= button_to "Register posts in the Central Registry!", register_posts_path %>
 			<%= button_to "Get Certificate from the Central Registry!", get_certificate_path %>
 		<% end %>

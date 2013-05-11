@@ -10,6 +10,9 @@
 	<tr>
 		<td style="text-align:center;"><%= sp["name"] %></td>
 		<td style="text-align:center;"><%= sp["adress"] %></td>
+
+		<td><%= button_to "Exchange Certificates", exchange_certificates_path(:service_provider => sp["name"], :service_provider_adress => sp["adress"]) %></td>
+
 	</tr>
 <% end %>
 </table>

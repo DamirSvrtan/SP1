@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130510120133) do
+ActiveRecord::Schema.define(:version => 20130511180554) do
+
+  create_table "certificates", :force => true do |t|
+    t.string   "sp"
+    t.string   "certificate"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "keys", :force => true do |t|
     t.string   "sp"

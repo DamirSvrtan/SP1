@@ -54,20 +54,45 @@ class CentralRegistry
 	JSON.parse(open("http://localhost:3000/posts").read)
   end
 
-  def self.request_post(service_provider, name)
-	if service_provider == Rails.root.to_s.scan(/\w+$/).first
-		post = Post.find_by_name(name)
-		return "/posts/#{post.id}"
-	else
-		#send_request_to_the_remote_server
-	end
+  def self.request_remote_post(service_provider, name, service_provider_adress)
+	sp = Rails.root.to_s.scan(/\w+$/).first
+	response = JSON.parse(open("http://#{service_provider_adress}/get_post?requesting_sp=#{sp}&post_name=#{name}").read)
+	link = Key.decrypt_link(response["link"])
   end
+
+#CERTIFIKATI
 
   def self.get_certificate
 	name = Rails.root.to_s.scan(/\w+$/).first
 	encoded_encrypted_certificate = JSON.parse(open("http://localhost:3000/certificate?sp=#{name}").read)
-	encrypted_certificate = Base64.decode64(encoded_encrypted_certificate["certificate"])
-	certificate = Key.encrypt_cr_certificate(encrypted_certificate)
+	unless Certificate.find_by_sp(name)
+		Certificate.create(:sp=> name, :certificate => encoded_encrypted_certificate["certificate"])
+	end
+	certificate = Key.decrypt_certificate(encoded_encrypted_certificate["certificate"])
   end
 
+  def self.exchange_certificates(sp, adress)
+	my_name = Rails.root.to_s.scan(/\w+$/).first
+	my_certificate = Certificate.find_by_sp(my_name)
+	response = JSON.parse(open("http://#{adress}/certificate_request_incoming?sp=#{sp}&certificate=#{my_certificate.certificate}").read)
+	if response["sp"] == sp
+		if sp == Key.decrypt_certificate(response["certificate"])
+			return "success"
+		else
+		        return "not the good key"
+		end
+	else
+		return "not even the good name"
+	end		
+  end
+
+  def self.respond_to_exchange_certificates(sp,certificate)
+	my_name = Rails.root.to_s.scan(/\w+$/).first
+	my_certificate = Certificate.find_by_sp(my_name)
+	if sp == Key.decrypt_certificate(certificate)
+		return my_certificate.certificate
+	else
+		return "NISTA"
+	end
+  end
 end
