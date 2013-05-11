@@ -64,7 +64,8 @@ class CentralRegistry
   end
 
   def self.get_certificate
-	encoded_encrypted_certificate = JSON.parse(open("http://localhost:3000/certificate").read)
+	name = Rails.root.to_s.scan(/\w+$/).first
+	encoded_encrypted_certificate = JSON.parse(open("http://localhost:3000/certificate?sp=#{name}").read)
 	encrypted_certificate = Base64.decode64(encoded_encrypted_certificate["certificate"])
 	certificate = Key.encrypt_cr_certificate(encrypted_certificate)
   end
