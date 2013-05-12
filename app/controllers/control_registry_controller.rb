@@ -60,18 +60,22 @@ class ControlRegistryController < ApplicationController
 
   def exchange_certificates
 	response = CentralRegistry.exchange_certificates(params[:service_provider], params[:service_provider_adress])
-	if response == "success"
-		flash[:notice] = "Successfully exchanged certificates with #{params[:service_provider]}"
-	else
-		flash[:alert] = "#{response}"
-	end
+	flash[:notice] = if response == "success"
+		 		"Successfully exchanged certificates with #{params[:service_provider]}"
+			 else
+				"#{response}"
+			 end
 	redirect_to other_sps_path
   end
  
   def certificate_request_incoming
 	response = CentralRegistry.respond_to_exchange_certificates(params[:sp],params[:certificate])
+	if response != "Invalid Certificate"
+		Key.savePublicKey(params[:sp], params[:public_key_modulus], params[:public_key_exponent])	
+	end
         my_name = Rails.root.to_s.scan(/\w+$/).first
-	render :json => { :sp => my_name, :certificate => response }
+	my_key = Key.find_by_sp(my_name)
+	render :json => { :sp => my_name, :public_key_modulus => my_key.public_key_modulus, :public_key_exponent => my_key.public_key_exponent, :certificate => response}
   end
 
 end

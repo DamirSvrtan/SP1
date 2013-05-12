@@ -66,12 +66,13 @@ class CentralRegistry
   def self.exchange_certificates(sp, adress)
 	my_name = Rails.root.to_s.scan(/\w+$/).first
 	my_certificate = Certificate.find_by_sp(my_name)
-
-	response = JSON.parse(open("http://#{adress}/certificate_request_incoming?sp=#{my_name}&certificate=#{my_certificate.certificate}").read)
+	my_key = Key.find_by_sp(my_name)
+	response = JSON.parse(open("http://#{adress}/certificate_request_incoming?sp=#{my_name}&public_key_modulus=#{my_key.public_key_modulus}&public_key_exponent=#{my_key.public_key_exponent}&certificate=#{my_certificate.certificate}").read)
 
 	if response["sp"] == sp
 		if sp == Key.decrypt_certificate(response["certificate"])
 			Certificate.save_if_non_existing(sp,response["certificate"])
+			Key.savePublicKey(response["sp"], response["public_key_modulus"], response["public_key_exponent"])	
 			return "success"
 		else
 		        return response["certificate"]
