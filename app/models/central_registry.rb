@@ -1,16 +1,8 @@
 class CentralRegistry
 
   def self.getServiceProviders
-	return JSON.parse(open("http://localhost:3000/service_providers").read)
-  end
-
-  def self.getPosts
-	begin
-		except = Rails.root.to_s.scan(/\w+$/).first
-		return JSON.parse(open("http://localhost:3000/posts?except=#{except}").read)
-	rescue Errno::ECONNREFUSED
-		return []
-	end
+	name = Rails.root.to_s.scan(/\w+$/).first
+	return JSON.parse(open("http://localhost:3000/service_providers?except=#{name}").read)
   end
 
   def self.register
@@ -74,12 +66,15 @@ class CentralRegistry
   def self.exchange_certificates(sp, adress)
 	my_name = Rails.root.to_s.scan(/\w+$/).first
 	my_certificate = Certificate.find_by_sp(my_name)
-	response = JSON.parse(open("http://#{adress}/certificate_request_incoming?sp=#{sp}&certificate=#{my_certificate.certificate}").read)
+
+	response = JSON.parse(open("http://#{adress}/certificate_request_incoming?sp=#{my_name}&certificate=#{my_certificate.certificate}").read)
+
 	if response["sp"] == sp
 		if sp == Key.decrypt_certificate(response["certificate"])
+			Certificate.save_if_non_existing(sp,response["certificate"])
 			return "success"
 		else
-		        return "not the good key"
+		        return response["certificate"]
 		end
 	else
 		return "not even the good name"
@@ -90,9 +85,10 @@ class CentralRegistry
 	my_name = Rails.root.to_s.scan(/\w+$/).first
 	my_certificate = Certificate.find_by_sp(my_name)
 	if sp == Key.decrypt_certificate(certificate)
+		Certificate.save_if_non_existing(sp,certificate)
 		return my_certificate.certificate
 	else
-		return "NISTA"
+		return "Invalid Certificate"
 	end
   end
 end

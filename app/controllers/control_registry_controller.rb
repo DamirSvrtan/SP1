@@ -63,7 +63,7 @@ class ControlRegistryController < ApplicationController
 	if response == "success"
 		flash[:notice] = "Successfully exchanged certificates with #{params[:service_provider]}"
 	else
-		flash[:alert] = "Unsuccessfully exchanged"
+		flash[:alert] = "#{response}"
 	end
 	redirect_to other_sps_path
   end
