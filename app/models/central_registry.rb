@@ -46,11 +46,12 @@ class CentralRegistry
 	JSON.parse(open("http://localhost:3000/posts").read)
   end
 
+#DOHVAT UDALJENOG POSTA
+
   def self.request_remote_post(service_provider, post_name, service_provider_adress)
 	sp = Rails.root.to_s.scan(/\w+$/).first
 	response = JSON.parse(open("http://#{service_provider_adress}/get_post?requesting_sp=#{sp}&post_name=#{post_name}").read)
-	response["post_id"]
-	#link = Key.decrypt_link(response["link"])
+	post_id = Key.decrypt_post_id(response["post_id"].to_i)
   end
 
 #CERTIFIKATI

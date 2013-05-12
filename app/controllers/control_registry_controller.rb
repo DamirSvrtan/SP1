@@ -54,7 +54,8 @@ class ControlRegistryController < ApplicationController
 	if Certificate.find_by_sp(params[:requesting_sp])
 		post = Post.find_by_name(params[:post_name])
 		if post
-			render :json => { :status => "OK", :post_id => post.id }
+			post_id = Key.encrypt_post_id(params[:requesting_sp], post.id)
+			render :json => { :status => "OK", :post_id => post_id }
 		else
 			render :json => { :status => "Post Not Found" }	
 		end		

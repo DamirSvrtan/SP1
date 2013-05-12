@@ -48,14 +48,22 @@ require 'rsa'
 	plaintext = new_key.encrypt(encrypted_certificate)
   end
 
-#  def self.decryptCertificate(cipherdata)
-#	cipherdata = Base64.encode64(cipherdata)
-#	key = Key.find_by_sp("CR")
-#	public = RSA::Key.new(key.public_key_modulus, key.public_key_exponent)
-#	new_key = RSA::KeyPair.new(nil, public)
-#	plaintext = new_key.encrypt(cipherdata)
-# end
+  def self.encrypt_post_id(sp, id)
+	spKey = Key.find_by_sp(sp)
+	public = RSA::Key.new(spKey.public_key_modulus, spKey.public_key_exponent)
+	new_key = RSA::KeyPair.new(nil, public)
+	cipher_id = new_key.encrypt(id.to_i)
+  end
 
+  def self.decrypt_post_id(cipher_id)
+	cipher_id = cipher_id.to_i
+	name = Rails.root.to_s.scan(/\w+$/).first
+	spKey = Key.find_by_sp(name)
+	private = RSA::Key.new(spKey.private_key_modulus, spKey.private_key_exponent)
+	new_key = RSA::KeyPair.new(private, nil)
+	id = new_key.decrypt(cipher_id)
+	id.to_i
+  end
 #dekriptiranje linka vlastitim privatnim kljucem
   def self.decrypt_link(link)
 	name = Rails.root.to_s.scan(/\w+$/).first
