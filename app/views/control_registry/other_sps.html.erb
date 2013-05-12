@@ -11,7 +11,7 @@
 		<td style="text-align:center;"><%= sp["name"] %></td>
 		<td style="text-align:center;"><%= sp["adress"] %></td>
 		<% unless Certificate.sp_in_certificates?(sp["name"]) %>
-		<td><%= button_to "Exchange Certificates", exchange_certificates_path(:service_provider => sp["name"], :service_provider_adress => sp["adress"]) %></td>
+		<td><%= button_to "Exchange Public Keys / Certificates", exchange_certificates_path(:service_provider => sp["name"], :service_provider_adress => sp["adress"]) %></td>
 		<% end %>
 	</tr>
 <% end %>

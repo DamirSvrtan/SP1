@@ -22,8 +22,12 @@ class ControlRegistryController < ApplicationController
   end
 
   def register_posts
-	response = CentralRegistry.register_posts
-	flash[:notice]="#{response["status"]}"
+	if Key.count >= 2
+		response = CentralRegistry.register_posts
+		flash[:notice]="#{response["status"]}"
+	else
+		flash[:warning]="Register your app and then you can register your posts!"
+	end
 	redirect_to root_path
   end
 
@@ -67,18 +71,31 @@ class ControlRegistryController < ApplicationController
 #CERTIFIKATI
 
   def get_certificate
-	certificate = CentralRegistry.get_certificate
-	flash[:notice] = "#{certificate}"
-	redirect_to root_path
+	if Key.count >= 2
+		name = Rails.root.to_s.scan(/\w+$/).first
+		if !Certificate.find_by_sp(name)
+			certificate = CentralRegistry.get_certificate
+			flash[:notice] = "Got your #{certificate} certificate"
+		else
+			flash[:notice] = "You already have a certificate!"
+		end
+	else
+		flash[:notice] = "Register with the Service Provider to get your certificate!"
+	end
+		redirect_to root_path
   end
 
   def exchange_certificates
-	response = CentralRegistry.exchange_certificates(params[:service_provider], params[:service_provider_adress])
-	flash[:notice] = if response == "success"
-		 		"Successfully exchanged certificates with #{params[:service_provider]}"
-			 else
-				"#{response}"
-			 end
+	if Certificate.count != 0
+		response = CentralRegistry.exchange_certificates(params[:service_provider], params[:service_provider_adress])
+		flash[:notice] = if response == "success"
+			 		"Successfully exchanged certificates with #{params[:service_provider]}"
+				 else
+					"#{response}"
+				 end
+	else
+		flash[:notice] = "You don't have a certificate!"
+	end
 	redirect_to other_sps_path
   end
  
