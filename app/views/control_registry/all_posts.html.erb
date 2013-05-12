@@ -16,7 +16,7 @@
 		<td style="text-align:center;"><%= post["author"] %></td>
 		<td style="text-align:center;"><%= post["service_provider_name"] %></td>
 		<td style="text-align:center;"><%= post["service_provider_adress"] %></td>
-		<td style="text-align:center;"><%= link_to "Request This Post", request_post_path(:service_provider => post["service_provider_name"], :service_provider_adress => post["service_provider_adress"], :name => post["name"]) %></td>
+		<td style="text-align:center;"><%= link_to "Request This Post", request_post_path(:service_provider => post["service_provider_name"], :service_provider_adress => post["service_provider_adress"], :post_name => post["name"]) %></td>
 	</tr>
 <% end %>
 </table>

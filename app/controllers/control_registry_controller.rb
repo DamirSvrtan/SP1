@@ -39,14 +39,27 @@ class ControlRegistryController < ApplicationController
   def request_post
 	name = Rails.root.to_s.scan(/\w+$/).first
 	if params[:service_provider] == name
-		post = Post.find_by_name(params[:name])
+		post = Post.find_by_name(params[:post_name])
 		redirect_to post
 	elsif Certificate.find_by_sp(params[:service_provider])
-		url = CentralRegistry.request_remote_post(params[:service_provider], params[:name], params[:service_provider_adress])
-		redirect_to url		
+		post_id = CentralRegistry.request_remote_post(params[:service_provider], params[:post_name], params[:service_provider_adress])
+		redirect_to "http://#{params[:service_provider_adress]}/posts/#{post_id}"
 	else
 	    flash[:alert]= "Please exchange certificates with #{params[:service_provider]}"
 	    redirect_to all_posts_path
+	end
+  end
+
+  def get_post
+	if Certificate.find_by_sp(params[:requesting_sp])
+		post = Post.find_by_name(params[:post_name])
+		if post
+			render :json => { :status => "OK", :post_id => post.id }
+		else
+			render :json => { :status => "Post Not Found" }	
+		end		
+	else
+		render :json => { :stauts => "Certificates not found" }
 	end
   end
   

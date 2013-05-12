@@ -19,6 +19,7 @@ Shs::Application.routes.draw do
   match '/get_certificate', to: 'control_registry#get_certificate'  
   match '/exchange_certificates', to: 'control_registry#exchange_certificates'  
   match '/certificate_request_incoming', to: 'control_registry#certificate_request_incoming'
+  match '/get_post', to: 'control_registry#get_post'
 
   root to: 'static_pages#home'
 
